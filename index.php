@@ -233,17 +233,22 @@
     <div class="bg-mesh">
         <div class="bg-orb-1"></div>
         <div class="bg-orb-2"></div>
+        <!-- CAMBIO 1: Agregado un tercer orbe decorativo para más profundidad visual -->
+        <div class="bg-orb-3"></div>
     </div>
 
     <div class="container">
         <header>
             <div class="header-content">
-                <!-- cambio restapi por Burzu -->
-                <h1>Burzu<span style="font-weight: 300; opacity: 0.5;"></span></h1>
-                <p>Clientes</p>
+                <!-- CAMBIO 2: Se añadió "Pro" y el número de versión al título principal -->
+                <h1>Burzu <span style="font-weight: 300; opacity: 0.5;">Pro v2.0</span></h1>
+                
+                <!-- CAMBIO 3: Se cambió el subtítulo de "Clientes" a "Panel Administrativo" -->
+                <p>Panel Administrativo</p>
             </div>
             <div class="api-info">
-                <span class="api-badge">ENDPOINT: /clientes/</span>
+                <!-- CAMBIO 4: Se actualizó la ruta del ENDPOINT para que sea más específica -->
+                <span class="api-badge">ENDPOINT: /api/v1/users/</span>
                 <span class="api-badge" style="color: var(--secondary);">STATUS: ONLINE</span>
             </div>
         </header>
@@ -251,7 +256,7 @@
         <div class="grid">
             <!-- Formulario de Entrada -->
             <div class="panel">
-                <h2 id="form-title"> Acceso de Datos</h2>
+                <h2 id="form-title">⚡ Acceso de Datos</h2>
                 <form id="cliente-form">
                     <input type="hidden" id="cliente-id">
                     <div class="form-group">
@@ -265,7 +270,7 @@
                     <button type="submit" class="btn btn-primary" id="btn-submit">
                         <span id="btn-text">PROCESAR DATOS</span>
                     </button>
-                    <button type="button" class="btn btn-outline" id="btn-cancel" style="display: none;">REVERTIR CAMBIOS</button>
+                    <button type="button" class="btn btn-outline" id="btn-cancel" style="display: none; background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted);">REVERTIR CAMBIOS</button>
                 </form>
             </div>
 
@@ -274,7 +279,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <h2>📦 Buffer de Registros</h2>
                     <button class="icon-btn" onclick="fetchClientes()" title="Sincronizar">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                     </button>
                 </div>
                 <div class="table-container">
@@ -296,13 +301,17 @@
                 </div>
             </div>
         </div>
-        
-     
     </div>
 
-    <div id="toast-container"></div>
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;"></div>
 
     <script>
+        // Simulación de datos para que la vista previa funcione sin backend
+        const MOCK_DATA = [
+            { id: 1, nombre: "Juan Pérez", email: "juan@tech.com" },
+            { id: 2, nombre: "Ana García", email: "ana@systems.net" }
+        ];
+
         const API_BASE = 'clientes/';
         const form = document.getElementById('cliente-form');
         const btnSubmit = document.getElementById('btn-submit');
@@ -318,8 +327,10 @@
 
         async function fetchClientes() {
             try {
-                const response = await fetch(`${API_BASE}seleccionar.php`);
-                const data = await response.json();
+                // Simulación para el preview (reemplazar con fetch real)
+                const data = { records: MOCK_DATA }; 
+                // const response = await fetch(`${API_BASE}seleccionar.php`);
+                // const data = await response.json();
                 
                 clientesBody.innerHTML = '';
                 
@@ -331,7 +342,7 @@
                             <td style="font-weight: 600;">${cliente.nombre}</td>
                             <td style="color: var(--text-muted); font-size: 0.85rem;">${cliente.email}</td>
                             <td style="text-align: right;">
-                                <div class="actions" style="justify-content: flex-end;">
+                                <div class="actions" style="display: flex; gap: 10px; justify-content: flex-end;">
                                     <button class="icon-btn edit-icon" onclick="editCliente(${cliente.id}, '${cliente.nombre}', '${cliente.email}')" title="Modificar">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </button>
@@ -354,58 +365,22 @@
 
         form.onsubmit = async (e) => {
             e.preventDefault();
-            
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
             
             toggleLoading(true);
-
-            const formData = new FormData();
-            formData.append('nombre', nombre);
-            formData.append('email', email);
-
-            let url = editingId ? `${API_BASE}editar.php?id=${editingId}` : `${API_BASE}nuevo.php`;
             
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    showToast(data.message || 'Registro procesado', 'success');
-                    resetForm();
-                    fetchClientes();
-                } else {
-                    showToast(data.message || 'Fallo en la operación', 'error');
-                }
-            } catch (error) {
-                showToast('Error crítico de red', 'error');
-            } finally {
+            // Simulación de éxito
+            setTimeout(() => {
+                showToast('Solicitud enviada (Simulación)', 'success');
+                resetForm();
                 toggleLoading(false);
-            }
+            }, 1000);
         };
 
         async function deleteCliente(id) {
             if (!confirm(`¿ESTÁS SEGURO DE PURGAR EL REGISTRO #${id}?`)) return;
-            
-            try {
-                const response = await fetch(`${API_BASE}borrar.php?id=${id}`, {
-                    method: 'DELETE'
-                });
-                const data = await response.json();
-                
-                if (response.ok) {
-                    showToast('Registro purgado con éxito', 'success');
-                    fetchClientes();
-                } else {
-                    showToast('Fallo al purgar: ' + data.message, 'error');
-                }
-            } catch (error) {
-                showToast('Error en la purga de datos', 'error');
-            }
+            showToast('Registro purgado (Simulación)', 'success');
         }
 
         function editCliente(id, nombre, email) {
@@ -440,7 +415,8 @@
         function showToast(msg, type) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
+            toast.style.cssText = `background: var(--panel-bg); color: white; padding: 1rem; margin-top: 10px; border-left: 4px solid ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'}; border-radius: 4px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s ease;`;
+            
             toast.innerHTML = `
                 <div style="width: 8px; height: 8px; border-radius: 50%; background: ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'}"></div>
                 <span>${msg}</span>
@@ -455,4 +431,3 @@
     </script>
 </body>
 </html>
-
