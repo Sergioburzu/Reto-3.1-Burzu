@@ -1,0 +1,78 @@
+[33mcommit d784852955c1dfc869fb19a9906b7a4bc2ccedce[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mangel_dev[m[33m, [m[1;31morigin/angel_dev[m[33m)[m
+Author: Angel <angel.lorenzo.garrido@gmail.com>
+Date:   Sat Jan 31 17:18:15 2026 +0100
+
+    subo cambio erroneo
+
+[1mdiff --git a/clientes/nuevo.php b/clientes/nuevo.php[m
+[1mindex 732e9ff..5ed824f 100644[m
+[1m--- a/clientes/nuevo.php[m
+[1m+++ b/clientes/nuevo.php[m
+[36m@@ -1,58 +1,37 @@[m
+ <?php[m
+ [m
+[31m-/**[m
+[31m- * Endpoint para crear un nuevo cliente.[m
+[31m- * [m
+[31m- * Este archivo procesa las solicitudes POST para insertar un nuevo cliente[m
+[31m- * en la base de datos.[m
+[31m- * [m
+[31m- * @package RestAPI\Endpoints[m
+[31m- */[m
+[31m-[m
+[31m-// Headers necesarios.[m
+[31m-// Permitimos que el archivo pueda ser leído por cualquier usuario.[m
+ header("Access-Control-Allow-Origin: *");[m
+[31m-// Indicamos que el resultado se devolverá en un JSON y codificado en UTF-8[m
+ header("Content-Type: application/json; charset=UTF-8");[m
+[31m-// Recibimos los datos por POST.[m
+ header("Access-Control-Allow-Methods: POST");[m
+[31m-// Los datos se almacenarán en la cache como máximo 1 hora.[m
+ header("Access-Control-Max-Age: 3600");[m
+[31m-// Cabeceras permitidas.[m
+ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");[m
+ [m
+[31m-// Incluimos la gestión de la tabla clientes.[m
+ include_once('../bd/clientes.php');[m
+[31m-// JSON con el mensaje de respuesta.[m
+[32m+[m
+ $json = array();[m
+[31m-// Si no nos envía los datos por POST.[m
+[32m+[m
+ if ($_SERVER['REQUEST_METHOD'] != "POST") {[m
+[31m-    // Código de respuesta - Method Not Alloweb[m
+     http_response_code(405);[m
+     $json['message'] = 'Sólo se permite el método POST.';[m
+ } else {[m
+[31m-    // Verificamos que están los datos.[m
+     if (isset($_POST['nombre']) && isset($_POST['email'])) {[m
+[31m-        // Creamos el objeto para insertar el cliente.[m
+         $clientes = new ClientesBD();[m
+[31m-        // Le damos los valores a insertar.[m
+         $clientes->nombre = $_POST['nombre'];[m
+         $clientes->email = $_POST['email'];[m
+[31m-        // Si no se ha podido insertar, error.[m
+[31m-        if (($clientes->Insertar() == -1) || $clientes->Error()) {[m
+[32m+[m
+[32m+[m
+[32m+[m[32m            // Hago un cambio erroneo en el ejercicio de Burzu cambio -1 por -100[m
+[32m+[m[32m        if (($clientes->Insertar() == -100) || $clientes->Error()) {[m
+             $json['message'] = 'Cliente no insertado.';[m
+[31m-            // Código de respuesta - 501 Not implemented[m
+             http_response_code(501);[m
+         } else {[m
+             $json['message'] = 'Cliente insertado.';[m
+[31m-            // Código de respuesta - 201 Created[m
+             http_response_code(201);[m
+         }[m
+     } else {[m
+[31m-        // Código de respuesta - 400 Bad Resquest[m
+         http_response_code(400);[m
+         $json['message'] = 'Datos incompletos.';[m
+     }[m
+ }[m
+[31m-// Devolvemos el JSON[m
+[31m-echo json_encode($json);[m
+[32m+[m
+[32m+[m[32mecho json_encode($json);[m
+\ No newline at end of file[m
