@@ -256,7 +256,8 @@
         <div class="grid">
             <!-- Formulario de Entrada -->
             <div class="panel">
-                <h2 id="form-title">⚡ Acceso de Datos</h2>
+                <!-- codigo para el conflicto -->
+                <h2 id="form-title">⚡vjkfonoibten </h2>
                 <form id="cliente-form">
                     <input type="hidden" id="cliente-id">
                     <div class="form-group">
